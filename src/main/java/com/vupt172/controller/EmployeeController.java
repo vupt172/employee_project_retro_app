@@ -1,10 +1,16 @@
 package com.vupt172.controller;
 
 import com.vupt172.dto.EmployeeDTO;
+import com.vupt172.security.jwt.JwtUtils;
 import com.vupt172.service.IEmployeeService;
+import com.vupt172.utils.UserDetailUtil;
+import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +19,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
+    @Autowired
+    JwtUtils jwtUtils;
     @Autowired
     private IEmployeeService employeeService;
     @GetMapping("")
@@ -29,7 +37,11 @@ public class EmployeeController {
     }
     @PostMapping("")
     public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO){
-        return ResponseEntity.ok(employeeService.create(employeeDTO));
+       // return ResponseEntity.ok(employeeService.create(employeeDTO));
+        UserDetailUtil userDetailUtil=new UserDetailUtil((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        System.out.println(userDetailUtil.hasSuperAdminRole());
+        System.out.println(userDetailUtil.userDetails.getAuthorities());
+        return null;
     }
 
 

@@ -6,8 +6,10 @@ import com.vupt172.entity.Employee;
 import com.vupt172.exception.DataUniqueException;
 import com.vupt172.exception.ElementNotExistException;
 import com.vupt172.repository.EmployeeRepository;
+import com.vupt172.security.service.UserDetailsImpl;
 import com.vupt172.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,6 +56,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         if(isExistByEmail)
             throw new DataUniqueException("Email is unique");
         //-checkRole
+        UserDetailsImpl userDetails= (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         //continue
         Employee employee = EmployeeConverter.toEntity(employeeDTO);
