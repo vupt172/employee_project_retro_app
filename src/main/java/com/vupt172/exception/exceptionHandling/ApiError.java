@@ -6,9 +6,10 @@ import lombok.Data;
 import java.util.Date;
 @Data
 @AllArgsConstructor
-public class ErrorMessage {
+public class ApiError {
     private int statusCode;
     private Date timestamp;
-    private  String message;
-    private  String description;
+    private String error;
+    private  Object details;
+    private  String path;
 }

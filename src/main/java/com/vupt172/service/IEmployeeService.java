@@ -13,4 +13,5 @@ public interface IEmployeeService {
     Optional<EmployeeDTO> findById(Long id);
     EmployeeDTO create(EmployeeDTO employeeDTO);
     EmployeeDTO update(EmployeeDTO employeeDTO) ;
+    EmployeeDTO delete(Long id);
 }

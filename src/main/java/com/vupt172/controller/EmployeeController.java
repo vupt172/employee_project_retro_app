@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,12 +37,17 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeDTO);
     }
     @PostMapping("")
-    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO){
-       // return ResponseEntity.ok(employeeService.create(employeeDTO));
-        UserDetailUtil userDetailUtil=new UserDetailUtil((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        System.out.println(userDetailUtil.hasSuperAdminRole());
-        System.out.println(userDetailUtil.userDetails.getAuthorities());
-        return null;
+    public ResponseEntity<EmployeeDTO> createEmployee(@Valid  @RequestBody EmployeeDTO employeeDTO){
+        return ResponseEntity.ok(employeeService.create(employeeDTO));
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id,@RequestBody EmployeeDTO employeeDTO){
+        employeeDTO.setId(id);
+        return ResponseEntity.ok(employeeService.update(employeeDTO));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<EmployeeDTO> deleteEmployee(@PathVariable Long id){
+        return ResponseEntity.ok(employeeService.delete(id));
     }
 
 

@@ -21,7 +21,8 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public List<ProjectDTO> findAll() {
-        List<ProjectDTO> projectDTOS = projectRepository.findAll().stream()
+        List<Project> projectList=projectRepository.findAll();
+        List<ProjectDTO> projectDTOS =projectList.stream()
                 .map(p -> ProjectConverter.toDTO(p)).collect(Collectors.toList());
         return projectDTOS;
     }
