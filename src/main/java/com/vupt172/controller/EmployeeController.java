@@ -1,18 +1,21 @@
 package com.vupt172.controller;
 
 import com.vupt172.dto.EmployeeDTO;
+import com.vupt172.security.jwt.JwtUtils;
 import com.vupt172.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
+    @Autowired
+    JwtUtils jwtUtils;
     @Autowired
     private IEmployeeService employeeService;
     @GetMapping("")
@@ -28,8 +31,17 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeDTO);
     }
     @PostMapping("")
-    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO){
+    public ResponseEntity<EmployeeDTO> createEmployee(@Valid  @RequestBody EmployeeDTO employeeDTO){
         return ResponseEntity.ok(employeeService.create(employeeDTO));
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id,@RequestBody EmployeeDTO employeeDTO){
+        employeeDTO.setId(id);
+        return ResponseEntity.ok(employeeService.update(employeeDTO));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<EmployeeDTO> deleteEmployee(@PathVariable Long id){
+        return ResponseEntity.ok(employeeService.delete(id));
     }
 
 

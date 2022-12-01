@@ -2,9 +2,11 @@ package com.vupt172.converter;
 
 import com.vupt172.dto.ProjectDTO;
 import com.vupt172.entity.Project;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProjectConverter {
-    public static ProjectDTO toDTO(Project project) {
+    public  ProjectDTO toDTO(Project project) {
         ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setId(project.getId());
         projectDTO.setName(project.getName());
@@ -13,7 +15,7 @@ public class ProjectConverter {
         return projectDTO;
     }
 
-    public static Project toEntity(ProjectDTO projectDTO) {
+    public  Project toEntity(ProjectDTO projectDTO) {
         Project project = new Project();
         project.setId(projectDTO.getId());
         project.setName(projectDTO.getName());
@@ -23,7 +25,7 @@ public class ProjectConverter {
         return project;
     }
 
-    public static Project toEntity(ProjectDTO projectDTO, Project dbProject) {
+    public  Project toEntity(ProjectDTO projectDTO, Project dbProject) {
         dbProject.setName(projectDTO.getName());
         dbProject.setDescription(projectDTO.getDescription());
         dbProject.setStatus(projectDTO.getStatus());
