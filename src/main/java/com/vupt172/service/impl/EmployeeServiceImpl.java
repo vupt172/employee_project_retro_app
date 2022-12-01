@@ -9,10 +9,9 @@ import com.vupt172.exception.OverPermissionException;
 import com.vupt172.repository.EmployeeRepository;
 import com.vupt172.security.service.UserDetailsImpl;
 import com.vupt172.service.IEmployeeService;
-import com.vupt172.utils.UserDetailUtil;
+import com.vupt172.utils.AuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,6 +23,8 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements IEmployeeService {
     @Autowired
     EmployeeRepository employeeRepository;
+    @Autowired
+    EmployeeConverter employeeConverter;
 
     @Override
     public List<EmployeeDTO> findAll() {
@@ -48,19 +49,19 @@ public class EmployeeServiceImpl implements IEmployeeService {
         //check business logic
         //-check unique
         //--check username
-        boolean isExistByUsername=employeeRepository.existsByUsername(employeeDTO.getUsername());
-        if(isExistByUsername)
+        boolean isExistByUsername = employeeRepository.existsByUsername(employeeDTO.getUsername());
+        if (isExistByUsername)
             throw new DataUniqueException("Username is unique");
         //--check phone
-        boolean isExistByPhone=employeeRepository.existsByPhone(employeeDTO.getPhone());
-        if(isExistByPhone)
+        boolean isExistByPhone = employeeRepository.existsByPhone(employeeDTO.getPhone());
+        if (isExistByPhone)
             throw new DataUniqueException("Phone is unique");
         //--check email
-        boolean isExistByEmail=employeeRepository.existsByEmail(employeeDTO.getEmail());
-        if(isExistByEmail)
+        boolean isExistByEmail = employeeRepository.existsByEmail(employeeDTO.getEmail());
+        if (isExistByEmail)
             throw new DataUniqueException("Email is unique");
         //continue
-        Employee employee = EmployeeConverter.toEntity(employeeDTO);
+        Employee employee = employeeConverter.toEntity(employeeDTO);
         employee = employeeRepository.save(employee);
         return EmployeeConverter.toDTO(employee);
     }
@@ -71,27 +72,52 @@ public class EmployeeServiceImpl implements IEmployeeService {
         //-find Employee
         Employee dbEmployee = employeeRepository.findById(employeeDTO.getId())
                 .orElseThrow(() -> new ElementNotExistException("Employee is not exist with id=" + employeeDTO.getId()));
+        Employee updatingEmployee = employeeConverter.toEntity(employeeDTO, dbEmployee);
+        //check Role
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AuthenticationUtil authenticationUtil = new AuthenticationUtil(userDetails);
+        //-with Super Admin Role ->cannot down role self
+        if (authenticationUtil.hasSuperAdminRole()) {
+            //check updating entity=superAdmin itself
+            if (updatingEmployee.getUsername().equals(authenticationUtil.getAuthUsername()))
+                if (updatingEmployee.getRole() != 0)
+                    throw new OverPermissionException("SUPER ADMIN cannot down grade itself.");
+        }
+        //-with Admin Role
+        else if (authenticationUtil.hasAdminRole()) {
+            //--check updating enity =superAdmin+admn
+            if (dbEmployee.getRole() == 0)
+                throw new OverPermissionException("ADMIN cannot update ADSUPER ADMIN");
+            else if (dbEmployee.getRole() == 1)
+                throw new OverPermissionException("ADMIN cannot update ADMIN");
+        }
+        //-SuperAdmin is only
+        if (updatingEmployee.getRole() == 0) {
+            if(!permissionUpdateToSuperAdminRole(authenticationUtil,dbEmployee,updatingEmployee)){
+                throw new OverPermissionException("Super Admin is only");
+            }
+        }
         //-check unique
-        Employee updatingEmployee=EmployeeConverter.toEntity(employeeDTO,dbEmployee);
-        List<String> uniqueDetails=new ArrayList<>();
+        List<String> uniqueDetails = new ArrayList<>();
         //--check username
-        Employee employeeByUsername=employeeRepository.findByUsername(updatingEmployee.getUsername()).orElse(null);
+  /*      Employee employeeByUsername=employeeRepository.findByUsername(updatingEmployee.getUsername()).orElse(null);
         if(employeeByUsername!=null&&!employeeByUsername.getId().equals(updatingEmployee.getId())){
            uniqueDetails.add("Username is unique");
-        }
+        }*/
         //--check email
-        Employee employeeByEmail=employeeRepository.findByEmail(updatingEmployee.getEmail()).orElse(null);
-        if(employeeByEmail!=null&&!employeeByEmail.getId().equals(updatingEmployee.getId())){
+        Employee employeeByEmail = employeeRepository.findByEmail(updatingEmployee.getEmail()).orElse(null);
+        if (employeeByEmail != null && !employeeByEmail.getId().equals(updatingEmployee.getId())) {
             uniqueDetails.add("Email is unique");
         }
         //--check phone
-        Employee employeeByPhone=employeeRepository.findByPhone(updatingEmployee.getPhone()).orElse(null);
-        if(employeeByPhone!=null&&!employeeByPhone.getId().equals(updatingEmployee.getId())){
+        Employee employeeByPhone = employeeRepository.findByPhone(updatingEmployee.getPhone()).orElse(null);
+        if (employeeByPhone != null && !employeeByPhone.getId().equals(updatingEmployee.getId())) {
             uniqueDetails.add("Phone is unique");
         }
-        if(!uniqueDetails.isEmpty()){
+        if (!uniqueDetails.isEmpty()) {
             throw new DataUniqueException(uniqueDetails.toString());
         }
+
         //continue
         updatingEmployee = employeeRepository.save(updatingEmployee);
         return EmployeeConverter.toDTO(updatingEmployee);
@@ -101,27 +127,34 @@ public class EmployeeServiceImpl implements IEmployeeService {
     public EmployeeDTO delete(Long id) {
         //check business logic
         //-find Employee
-        Employee deletingEmployee=employeeRepository.findById(id)
-                .orElseThrow(()->new ElementNotExistException("Employee not exist with id ="+id));
+        Employee deletingEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ElementNotExistException("Employee not exist with id =" + id));
         //-check authentication Role;
-        UserDetailsImpl userDetails= (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetailUtil userDetailUtil=new UserDetailUtil(userDetails);
-       if(userDetailUtil.hasSuperAdminRole()){
-           //-check deletingEmployee role;
-           if(deletingEmployee.getRole()==0){
-               throw new OverPermissionException("SUPER ADMIN cannot delete own itself");
-           }
-       }
-        else if(userDetailUtil.hasAdminRole()){
-           //--check deletingEmployee role;
-           if(deletingEmployee.getRole()==0)
-               throw new OverPermissionException("ADMIN cannot delete SUPER ADMIN");
-           if(deletingEmployee.getRole()==1)
-               throw new OverPermissionException("ADMIN cannot delete ADMIN");
-       }
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AuthenticationUtil userDetailUtil = new AuthenticationUtil(userDetails);
+        if (userDetailUtil.hasSuperAdminRole()) {
+            //-check deletingEmployee role;
+            if (deletingEmployee.getRole() == 0) {
+                throw new OverPermissionException("SUPER ADMIN cannot delete own itself");
+            }
+        } else if (userDetailUtil.hasAdminRole()) {
+            //--check deletingEmployee role;
+            if (deletingEmployee.getRole() == 0)
+                throw new OverPermissionException("ADMIN cannot delete SUPER ADMIN");
+            if (deletingEmployee.getRole() == 1)
+                throw new OverPermissionException("ADMIN cannot delete ADMIN");
+        }
         //continue
         employeeRepository.delete(deletingEmployee);
         deletingEmployee.setStatus("Deleted");
         return EmployeeConverter.toDTO(deletingEmployee);
+    }
+
+    boolean permissionUpdateToSuperAdminRole(AuthenticationUtil authenticationUtil, Employee dbEmployee, Employee updatingEmployee) {
+        //only Super Admin can update itselft to SuperAdmin
+        if(authenticationUtil.hasSuperAdminRole()){
+            if(authenticationUtil.getAuthUsername().equals(dbEmployee.getUsername()))return true;
+        }
+        return false;
     }
 }

@@ -3,19 +3,13 @@ package com.vupt172.controller;
 import com.vupt172.dto.EmployeeDTO;
 import com.vupt172.security.jwt.JwtUtils;
 import com.vupt172.service.IEmployeeService;
-import com.vupt172.utils.UserDetailUtil;
-import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/employees")

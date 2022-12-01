@@ -1,15 +1,15 @@
 package com.vupt172.utils;
 
-import com.vupt172.security.service.UserDetailsImpl;
 import lombok.Data;
 import org.springframework.security.core.userdetails.UserDetails;
-@Data
-public class UserDetailUtil {
+public class AuthenticationUtil {
     private  UserDetails userDetails;
-    public UserDetailUtil(UserDetails userDetails){
+
+
+    public AuthenticationUtil(UserDetails userDetails){
     this.userDetails=userDetails;
     }
-
+   public String getAuthUsername(){return userDetails.getUsername();}
     public boolean hasSuperAdminRole(){
        return this.userDetails.getAuthorities().stream().anyMatch(authority->authority.getAuthority().equals("SUPERADMIN"));
     }

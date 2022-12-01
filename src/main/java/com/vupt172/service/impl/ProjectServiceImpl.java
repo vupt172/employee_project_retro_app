@@ -18,12 +18,14 @@ import java.util.stream.Collectors;
 public class ProjectServiceImpl implements IProjectService {
     @Autowired
     ProjectRepository projectRepository;
+    @Autowired
+    ProjectConverter projectConverter;
 
     @Override
     public List<ProjectDTO> findAll() {
         List<Project> projectList=projectRepository.findAll();
         List<ProjectDTO> projectDTOS =projectList.stream()
-                .map(p -> ProjectConverter.toDTO(p)).collect(Collectors.toList());
+                .map(p -> projectConverter.toDTO(p)).collect(Collectors.toList());
         return projectDTOS;
     }
 
@@ -32,7 +34,7 @@ public class ProjectServiceImpl implements IProjectService {
         Project project = projectRepository.findById(id).orElse(null);
         ProjectDTO projectDTO = null;
         if (project != null) {
-            projectDTO = ProjectConverter.toDTO(project);
+            projectDTO = projectConverter.toDTO(project);
         }
         return Optional.ofNullable(projectDTO);
     }
@@ -45,9 +47,9 @@ public class ProjectServiceImpl implements IProjectService {
        boolean isExistByName= projectRepository.existsByName(projectDTO.getName());
        if(isExistByName)throw new DataUniqueException("Project name is unique");
         //continue
-        Project newProject = ProjectConverter.toEntity(projectDTO);
+        Project newProject = projectConverter.toEntity(projectDTO);
         newProject = projectRepository.save(newProject);
-        return ProjectConverter.toDTO(newProject);
+        return projectConverter.toDTO(newProject);
     }
 
     @Override
@@ -57,14 +59,14 @@ public class ProjectServiceImpl implements IProjectService {
         Project oldProject = projectRepository.findById(projectDTO.getId())
                 .orElseThrow(() -> new ElementNotExistException("Project is not exist with id=" + projectDTO.getId()));
         //-check unique
-        Project updatingProject = ProjectConverter.toEntity(projectDTO, oldProject);
+        Project updatingProject = projectConverter.toEntity(projectDTO, oldProject);
         Project projectByName=projectRepository.findByName(updatingProject.getName()).orElse(null);
         if(projectByName!=null&&!projectByName.getId().equals(updatingProject.getId())){
             throw new DataUniqueException("Project name is unique");
         }
         //continue
         updatingProject = projectRepository.save(updatingProject);
-        return ProjectConverter.toDTO(updatingProject);
+        return projectConverter.toDTO(updatingProject);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class ProjectServiceImpl implements IProjectService {
                 .orElseThrow(() -> new ElementNotExistException("Project id not exist with id=" + id));
         projectRepository.delete(deletingProject);
         deletingProject.setStatus("Deleted");
-        return ProjectConverter.toDTO(deletingProject);
+        return projectConverter.toDTO(deletingProject);
     }
 
 
