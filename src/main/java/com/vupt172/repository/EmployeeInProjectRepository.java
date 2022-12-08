@@ -7,4 +7,5 @@ import java.util.*;
 public interface EmployeeInProjectRepository extends JpaRepository<EmployeeInProject, EmployeeInProjectKey> {
  List<EmployeeInProject> findByProject_Id(Long projectId);
  Optional<EmployeeInProject> findByProject_IdAndEmployee_Id(Long projectId,Long employeeId);
+ boolean existsByProject_IdAndEmployee_Id(Long projectId,Long employeeId);
 }

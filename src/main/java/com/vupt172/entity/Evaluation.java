@@ -14,10 +14,10 @@ public class Evaluation extends  BaseEntity{
     private Project project;
     @ManyToOne
     @JoinColumn(name="evaluator_id")
-    private EmployeeInProject evaluatorInProject;
+    private Employee evaluator;
     @ManyToOne
     @JoinColumn(name="evaluatee_id")
-    private EmployeeInProject evaluateeInProject;
+    private Employee evaluatee;
     @Column
     private int point;
     @Column

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Entity
@@ -26,10 +25,10 @@ public class EmployeeInProject {
     @JoinColumn(name="role_id")
     private ProjectRole projectRole;
 
-    @OneToMany(mappedBy = "evaluateeInProject")
+/*    @OneToMany(mappedBy = "evaluateeInProject")
     private List<Evaluation> evaluationsToMe;
     @OneToMany(mappedBy = "evaluatorInProject")
-    private List<Evaluation> evaluationsToOther;
+    private List<Evaluation> evaluationsToOther;*/
 
 
 }

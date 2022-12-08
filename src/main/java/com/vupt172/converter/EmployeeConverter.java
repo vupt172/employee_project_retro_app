@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class EmployeeConverter {
+    public String message="This is employee converter";
     @Autowired
     PasswordEncoder passwordEncoder;
     public  Employee toEntity(EmployeeDTO employeeDTO) {
@@ -43,6 +44,7 @@ public class EmployeeConverter {
         updatingEmployee.setId(dbEmployee.getId());
         //cannot change username
         updatingEmployee.setUsername(dbEmployee.getUsername());
+        //
         updatingEmployee.setPassword(passwordEncoder.encode(employeeDTO.getPassword()));
         updatingEmployee.setFullName(employeeDTO.getFullName());
         updatingEmployee.setEmail(employeeDTO.getEmail());
@@ -52,4 +54,6 @@ public class EmployeeConverter {
         updatingEmployee.setStatus(employeeDTO.getStatus());
         return updatingEmployee;
     }
+    @Override
+    public String toString(){return this.message;}
 }
