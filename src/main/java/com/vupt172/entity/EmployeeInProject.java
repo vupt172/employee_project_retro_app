@@ -1,9 +1,10 @@
 package com.vupt172.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -12,6 +13,7 @@ import javax.persistence.*;
 public class EmployeeInProject {
     @EmbeddedId
    private  EmployeeInProjectKey id=new EmployeeInProjectKey();
+    @JsonIgnore
     @ManyToOne
     @MapsId("projectId")
     @JoinColumn(name="project_id")
@@ -23,5 +25,11 @@ public class EmployeeInProject {
     @ManyToOne
     @JoinColumn(name="role_id")
     private ProjectRole projectRole;
+
+    @OneToMany(mappedBy = "evaluateeInProject")
+    private List<Evaluation> evaluationsToMe;
+    @OneToMany(mappedBy = "evaluatorInProject")
+    private List<Evaluation> evaluationsToOther;
+
 
 }

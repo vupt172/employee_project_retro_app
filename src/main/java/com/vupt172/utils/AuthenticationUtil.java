@@ -1,13 +1,15 @@
 package com.vupt172.utils;
 
-import lombok.Data;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 public class AuthenticationUtil {
-    private  UserDetails userDetails;
+    private Authentication authentication;
+    private UserDetails userDetails;
 
 
-    public AuthenticationUtil(UserDetails userDetails){
-    this.userDetails=userDetails;
+    public AuthenticationUtil(Authentication authentication){
+    this.authentication=authentication;
+    this.userDetails=(UserDetails) authentication.getPrincipal();
     }
    public String getAuthUsername(){return userDetails.getUsername();}
     public boolean hasSuperAdminRole(){

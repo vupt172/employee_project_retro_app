@@ -1,12 +1,9 @@
 package com.vupt172.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -26,7 +23,7 @@ public class Project extends  BaseEntity{
     @Column
     private String status;
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "project")
-    Set<EmployeeInProject> employeeInProjects;
+    private List<EmployeeInProject> employeeInProjects=new ArrayList<>();
    /* @OneToMany(mappedBy="project")
     Set<Comment> comments;*/
 }

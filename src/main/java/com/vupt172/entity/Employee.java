@@ -1,10 +1,12 @@
 package com.vupt172.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Table(name = "employee")
@@ -24,6 +26,7 @@ public class Employee extends BaseEntity {
     private Date birthDay;
     private int role;
     private String status;
-    @OneToMany(fetch = FetchType.LAZY,mappedBy ="employee")
-    private Set<EmployeeInProject> employeeInProjects;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER,mappedBy ="employee")
+    private List<EmployeeInProject> employeeInProjects=new ArrayList<>();
 }

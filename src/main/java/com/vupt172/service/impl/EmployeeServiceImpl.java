@@ -7,7 +7,6 @@ import com.vupt172.exception.DataUniqueException;
 import com.vupt172.exception.ElementNotExistException;
 import com.vupt172.exception.OverPermissionException;
 import com.vupt172.repository.EmployeeRepository;
-import com.vupt172.security.service.UserDetailsImpl;
 import com.vupt172.service.IEmployeeService;
 import com.vupt172.utils.AuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,8 +73,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
                 .orElseThrow(() -> new ElementNotExistException("Employee is not exist with id=" + employeeDTO.getId()));
         Employee updatingEmployee = employeeConverter.toEntity(employeeDTO, dbEmployee);
         //check Role
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        AuthenticationUtil authenticationUtil = new AuthenticationUtil(userDetails);
+        AuthenticationUtil authenticationUtil = new AuthenticationUtil(SecurityContextHolder.getContext().getAuthentication());
         //-with Super Admin Role ->cannot down role self
         if (authenticationUtil.hasSuperAdminRole()) {
             //check updating entity=superAdmin itself
@@ -130,8 +128,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         Employee deletingEmployee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ElementNotExistException("Employee not exist with id =" + id));
         //-check authentication Role;
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        AuthenticationUtil userDetailUtil = new AuthenticationUtil(userDetails);
+        AuthenticationUtil userDetailUtil = new AuthenticationUtil(SecurityContextHolder.getContext().getAuthentication());
         if (userDetailUtil.hasSuperAdminRole()) {
             //-check deletingEmployee role;
             if (deletingEmployee.getRole() == 0) {
