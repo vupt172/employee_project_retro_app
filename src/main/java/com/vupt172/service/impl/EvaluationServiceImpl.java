@@ -6,6 +6,7 @@ import com.vupt172.entity.Employee;
 import com.vupt172.entity.Evaluation;
 import com.vupt172.entity.Project;
 import com.vupt172.exception.ElementNotExistException;
+import com.vupt172.exception.EvaluationException;
 import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.EmployeeRepository;
 import com.vupt172.repository.EvaluationRepository;
@@ -55,6 +56,9 @@ public class EvaluationServiceImpl implements IEvaluationService {
        Employee evaluatee=employeeRepository.findById(evaluationDTO.getEvaluateeId()).orElseThrow(
                ()->new ElementNotExistException("Evaluatee with id = "+evaluationDTO.getEvaluateeId()+" not exist")
        );
+       if(evaluator==evaluatee){
+           throw new EvaluationException("Cannot evaluate yourself");
+       }
        boolean isEvaluateeInProject=employeeInProjectRepository.existsByProject_IdAndEmployee_Id(evaluationDTO.getProjectId(),evaluationDTO.getEvaluateeId());
        if(!isEvaluateeInProject){
            throw new ElementNotExistException("Evaluatee with id = "+evaluationDTO.getEvaluatorId()+" not exist in project");

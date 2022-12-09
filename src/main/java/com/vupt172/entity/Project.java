@@ -24,6 +24,5 @@ public class Project extends  BaseEntity{
     private String status;
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "project")
     private List<EmployeeInProject> employeeInProjects=new ArrayList<>();
-   /* @OneToMany(mappedBy="project")
-    Set<Comment> comments;*/
+
 }

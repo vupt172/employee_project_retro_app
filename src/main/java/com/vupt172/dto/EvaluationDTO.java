@@ -12,5 +12,6 @@ public class EvaluationDTO {
     private Long evaluateeId;
     private int point;
     private String comment;
-    private Date date;
+    private Date createdDate;
+    private Date updatedDate;
 }

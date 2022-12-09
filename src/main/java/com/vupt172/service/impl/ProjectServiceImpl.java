@@ -5,6 +5,7 @@ import com.vupt172.dto.ProjectDTO;
 import com.vupt172.entity.Project;
 import com.vupt172.exception.ElementNotExistException;
 import com.vupt172.exception.DataUniqueException;
+import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.ProjectRepository;
 import com.vupt172.service.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class ProjectServiceImpl implements IProjectService {
     ProjectRepository projectRepository;
     @Autowired
     ProjectConverter projectConverter;
+    @Autowired
+    EmployeeInProjectRepository employeeInProjectRepository;
 
     @Override
     public List<ProjectDTO> findAll() {
@@ -73,9 +76,20 @@ public class ProjectServiceImpl implements IProjectService {
     public ProjectDTO delete(Long id) throws ElementNotExistException {
         Project deletingProject = projectRepository.findById(id)
                 .orElseThrow(() -> new ElementNotExistException("Project id not exist with id=" + id));
+        //soft delete
+        //-check employee in project
+       boolean hasEmployeeInProject= employeeInProjectRepository.existsByProject_Id(id);
+       if(hasEmployeeInProject){
+           deletingProject.setStatus("Disable");
+           projectRepository.save(deletingProject);
+           return projectConverter.toDTO(deletingProject);
+       }
+       //-check evaluation
+
+
         projectRepository.delete(deletingProject);
         deletingProject.setStatus("Deleted");
-        return projectConverter.toDTO(deletingProject);
+
     }
 
 

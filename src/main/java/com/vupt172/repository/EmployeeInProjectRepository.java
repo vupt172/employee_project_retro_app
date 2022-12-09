@@ -8,4 +8,5 @@ public interface EmployeeInProjectRepository extends JpaRepository<EmployeeInPro
  List<EmployeeInProject> findByProject_Id(Long projectId);
  Optional<EmployeeInProject> findByProject_IdAndEmployee_Id(Long projectId,Long employeeId);
  boolean existsByProject_IdAndEmployee_Id(Long projectId,Long employeeId);
+ boolean existsByProject_Id(Long projectId);
 }

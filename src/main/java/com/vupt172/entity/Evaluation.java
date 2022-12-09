@@ -23,5 +23,8 @@ public class Evaluation extends  BaseEntity{
     @Column
     private String comment;
     @Column
-    private Date date;
+    private Date createdDate;
+    @Column
+    private Date updatedDate;
+
 }

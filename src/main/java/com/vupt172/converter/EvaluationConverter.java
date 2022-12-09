@@ -15,14 +15,16 @@ public class EvaluationConverter {
         evaluationDTO.setEvaluateeId(evaluation.getEvaluatee().getId());
         evaluationDTO.setPoint(evaluation.getPoint());
         evaluationDTO.setComment(evaluation.getComment());
-        evaluationDTO.setDate(evaluation.getDate());
+        evaluationDTO.setCreatedDate(evaluation.getCreatedDate());
+        evaluationDTO.setUpdatedDate(evaluation.getUpdatedDate());
         return evaluationDTO;
     }
 
     public Evaluation toEntity(EvaluationDTO evaluationDTO) {
         Evaluation evaluation = new Evaluation();
         evaluation.setPoint(evaluationDTO.getPoint());
-        evaluation.setDate(new Date());
+        evaluation.setCreatedDate(new Date());
+        evaluation.setUpdatedDate(evaluation.getCreatedDate());
         evaluation.setComment(evaluationDTO.getComment());
         return evaluation;
     }
@@ -39,7 +41,8 @@ public class EvaluationConverter {
         //
         evaluation.setPoint(dto.getPoint());
         evaluation.setComment(dto.getComment());
-        evaluation.setDate(new Date());
+        evaluation.setCreatedDate(dbEvaluation.getCreatedDate());
+        evaluation.setUpdatedDate(new Date());
         return evaluation;
     }
 }
