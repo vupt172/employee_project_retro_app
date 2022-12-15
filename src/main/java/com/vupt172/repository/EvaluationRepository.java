@@ -24,4 +24,18 @@ public interface EvaluationRepository extends JpaRepository<Evaluation,Long> {
             @Param("evaluatee_id") Long evaluateeId,
             @Param("from") Date from,
             @Param("to") Date to);
+    boolean existsByProject_IdAndEvaluator_Id(Long projectId,Long evaluatorId);
+    boolean existsByProject_IdAndEvaluatee_Id(Long projectId,Long evaluateeId);
+    @Query(value="SELECT COUNT(*) FROM evaluation WHERE (" +
+            "project_id=:project_id AND " +
+            "evaluator_id=:evaluator_id AND " +
+            "evaluatee_id=:evaluatee_id AND " +
+            "MONTH(updated_date)=:month AND " +
+            "YEAR(updated_date)=:year)"
+            ,nativeQuery = true)
+    int existsByMonthInYear(@Param("project_id") Long projectId,
+                                   @Param("evaluator_id") Long evaluatorId,
+                                   @Param("evaluatee_id") Long evaluateeId,
+                                   @Param("month") int month,
+                                   @Param("year") int year);
 }

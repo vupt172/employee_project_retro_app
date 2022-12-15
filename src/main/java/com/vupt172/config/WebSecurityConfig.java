@@ -5,6 +5,7 @@ import com.vupt172.security.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -37,9 +38,11 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/employees/**").hasAnyAuthority("SUPERADMIN","ADMIN")
-                .antMatchers("/api/**").permitAll()
+                .authorizeRequests().antMatchers("/api/auth/login","/api/auth/refreshtoken").permitAll()
+                .antMatchers("/api/employees/**").hasAnyRole("SUPERADMIN","ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/projects/**").hasAnyRole("USER","SUPERADMIN","ADMIN")
+                .antMatchers("/api/projects/**").hasAnyRole("SUPERADMIN","ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/evaluations/**").hasAnyRole("SUPERADMIN","ADMIN")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

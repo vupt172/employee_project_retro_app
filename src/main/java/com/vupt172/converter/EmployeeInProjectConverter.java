@@ -12,6 +12,7 @@ public class EmployeeInProjectConverter {
         employeeInProjectDTO.setProjectId(employeeInProject.getProject().getId());
        // employeeInProjectDTO.setUsername(employeeInProject.getEmployee().getUsername());
         employeeInProjectDTO.setProjectRole(employeeInProject.getProjectRole().getName());
+        employeeInProjectDTO.setStatus(employeeInProject.getStatus());
         return employeeInProjectDTO;
     }
 }

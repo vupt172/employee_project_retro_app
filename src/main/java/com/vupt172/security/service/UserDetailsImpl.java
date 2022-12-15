@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
@@ -35,9 +34,9 @@ public class UserDetailsImpl implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());*/
         List<GrantedAuthority> authorities=new ArrayList<>();
-        if(employee.getRole()==0)authorities.add(new SimpleGrantedAuthority("SUPERADMIN"));
-        else if(employee.getRole()==1)authorities.add(new SimpleGrantedAuthority("ADMIN"));
-        else if(employee.getRole()==2)authorities.add(new SimpleGrantedAuthority("USER"));
+        if(employee.getRole()==0)authorities.add(new SimpleGrantedAuthority("ROLE_SUPERADMIN"));
+        else if(employee.getRole()==1)authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        else if(employee.getRole()==2)authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         return new UserDetailsImpl(employee.getId(), employee.getUsername(), employee.getEmail(), employee.getPassword(), authorities);
     }
 

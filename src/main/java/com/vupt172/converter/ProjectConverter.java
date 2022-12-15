@@ -27,10 +27,11 @@ public class ProjectConverter {
     }
 
     public  Project toEntity(ProjectDTO projectDTO, Project dbProject) {
-        dbProject.setName(projectDTO.getName());
-        dbProject.setDescription(projectDTO.getDescription());
-        dbProject.setStatus(projectDTO.getStatus());
-            dbProject.setStatus(projectDTO.getStatus());
-        return dbProject;
+        Project updatingProject=new Project();
+        updatingProject.setId(dbProject.getId());
+        updatingProject.setName(projectDTO.getName());
+        updatingProject.setDescription(projectDTO.getDescription());
+        updatingProject.setStatus(projectDTO.getStatus());
+        return updatingProject;
     }
 }

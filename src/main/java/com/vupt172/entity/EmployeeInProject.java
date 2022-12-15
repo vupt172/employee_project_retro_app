@@ -24,6 +24,8 @@ public class EmployeeInProject {
     @ManyToOne
     @JoinColumn(name="role_id")
     private ProjectRole projectRole;
+    @Column
+    private String status;
 
 /*    @OneToMany(mappedBy = "evaluateeInProject")
     private List<Evaluation> evaluationsToMe;

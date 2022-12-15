@@ -10,4 +10,5 @@ public interface IEmployeeInProjectService {
     Optional<EmployeeInProjectDTO> findEmployeeInProjectById(Long projectId,Long employeeId);
     EmployeeInProjectDTO createEmployeeInProject(EmployeeInProjectDTO employeeInProjectDTO);
     EmployeeInProjectDTO updateEmployeeInProject(EmployeeInProjectDTO employeeInProjectDTO);
+    EmployeeInProjectDTO deleteEmployeeInProject(Long projectId,Long employeeId);
 }
