@@ -7,4 +7,5 @@ public class EmployeeInProjectDTO {
     private Long projectId;
     private Long employeeId;
     private String projectRole;
+    private String status;
 }

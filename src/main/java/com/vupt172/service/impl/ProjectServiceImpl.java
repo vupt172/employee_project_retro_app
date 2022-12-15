@@ -3,8 +3,8 @@ package com.vupt172.service.impl;
 import com.vupt172.converter.ProjectConverter;
 import com.vupt172.dto.ProjectDTO;
 import com.vupt172.entity.Project;
-import com.vupt172.exception.ElementNotExistException;
 import com.vupt172.exception.DataUniqueException;
+import com.vupt172.exception.ElementNotExistException;
 import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.ProjectRepository;
 import com.vupt172.service.IProjectService;
@@ -59,10 +59,10 @@ public class ProjectServiceImpl implements IProjectService {
     public ProjectDTO update(ProjectDTO projectDTO)  {
         //check business logic
         //-find project
-        Project oldProject = projectRepository.findById(projectDTO.getId())
+        Project dbProject = projectRepository.findById(projectDTO.getId())
                 .orElseThrow(() -> new ElementNotExistException("Project is not exist with id=" + projectDTO.getId()));
         //-check unique
-        Project updatingProject = projectConverter.toEntity(projectDTO, oldProject);
+        Project updatingProject = projectConverter.toEntity(projectDTO, dbProject);
         Project projectByName=projectRepository.findByName(updatingProject.getName()).orElse(null);
         if(projectByName!=null&&!projectByName.getId().equals(updatingProject.getId())){
             throw new DataUniqueException("Project name is unique");
@@ -84,12 +84,9 @@ public class ProjectServiceImpl implements IProjectService {
            projectRepository.save(deletingProject);
            return projectConverter.toDTO(deletingProject);
        }
-       //-check evaluation
-
-
         projectRepository.delete(deletingProject);
         deletingProject.setStatus("Deleted");
-
+        return projectConverter.toDTO(deletingProject);
     }
 
 

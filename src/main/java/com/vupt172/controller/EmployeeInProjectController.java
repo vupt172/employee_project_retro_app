@@ -45,7 +45,7 @@ public class EmployeeInProjectController {
         return ResponseEntity.ok(returnDTO);
     }
     @DeleteMapping("/{employeeId}")
-    public void deleteEmployeeInProject(@PathVariable Long projectId,@PathVariable Long employeeId){
-
+    public ResponseEntity<EmployeeInProjectDTO> deleteEmployeeInProject(@PathVariable Long projectId, @PathVariable Long employeeId){
+     return ResponseEntity.ok(employeeInProjectService.deleteEmployeeInProject(projectId,employeeId));
     }
 }

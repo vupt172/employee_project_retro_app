@@ -15,6 +15,7 @@ import com.vupt172.service.IEvaluationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,8 +62,15 @@ public class EvaluationServiceImpl implements IEvaluationService {
        }
        boolean isEvaluateeInProject=employeeInProjectRepository.existsByProject_IdAndEmployee_Id(evaluationDTO.getProjectId(),evaluationDTO.getEvaluateeId());
        if(!isEvaluateeInProject){
-           throw new ElementNotExistException("Evaluatee with id = "+evaluationDTO.getEvaluatorId()+" not exist in project");
+           throw new ElementNotExistException("Evaluatee with id = "+evaluationDTO.getEvaluateeId()+" not exist in project");
        }
+       //check exist evaluation in month of year
+        LocalDate localDate=LocalDate.now();
+        int hasEvaluationInMonthOfYear=evaluationRepository.existsByMonthInYear(evaluationDTO.getProjectId(),evaluationDTO.getEvaluatorId(),evaluationDTO.getEvaluateeId(),localDate.getMonthValue(),localDate.getYear());
+        if(hasEvaluationInMonthOfYear>0){
+            throw new EvaluationException("Evaluation has already exist in "+localDate.getMonthValue()+"/"+localDate.getYear());
+        }
+
        Evaluation evaluation=evaluationConverter.toEntity(evaluationDTO);
        evaluation.setProject(project);
        evaluation.setEvaluator(evaluator);
@@ -76,6 +84,11 @@ public class EvaluationServiceImpl implements IEvaluationService {
         Evaluation dbEvaluation=evaluationRepository.findById(evaluationDTO.getId()).orElseThrow(
                 ()->new ElementNotExistException("Evaluation not exist with id ="+evaluationDTO.getId())
         );
+        //check evaluation month
+        LocalDate localDate=LocalDate.now();
+        if(localDate.getMonthValue()!=dbEvaluation.getCreatedDate().getMonth()+1||localDate.getYear()!=dbEvaluation.getCreatedDate().getYear()+1900){
+           throw new EvaluationException("Cannot update evaluation in another month in year.");
+        }
         Evaluation updatingEvaluation=evaluationConverter.toEntity(evaluationDTO,dbEvaluation);
         updatingEvaluation=evaluationRepository.save(updatingEvaluation);
         return evaluationConverter.toDTO(updatingEvaluation);

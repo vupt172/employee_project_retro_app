@@ -6,6 +6,7 @@ import com.vupt172.entity.Employee;
 import com.vupt172.exception.DataUniqueException;
 import com.vupt172.exception.ElementNotExistException;
 import com.vupt172.exception.OverPermissionException;
+import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.EmployeeRepository;
 import com.vupt172.service.IEmployeeService;
 import com.vupt172.utils.AuthenticationUtil;
@@ -24,7 +25,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
     EmployeeRepository employeeRepository;
     @Autowired
     EmployeeConverter employeeConverter;
-
+    @Autowired
+    EmployeeInProjectRepository employeeInProjectRepository;
     @Override
     public List<EmployeeDTO> findAll() {
         List<EmployeeDTO> employeeDTOS = employeeRepository.findAll().stream()
@@ -140,6 +142,13 @@ public class EmployeeServiceImpl implements IEmployeeService {
                 throw new OverPermissionException("ADMIN cannot delete SUPER ADMIN");
             if (deletingEmployee.getRole() == 1)
                 throw new OverPermissionException("ADMIN cannot delete ADMIN");
+        }
+        //soft delete
+        boolean hasEmployeeInProject =employeeInProjectRepository.existsByEmployee_Id(id);
+        if(hasEmployeeInProject){
+            deletingEmployee.setStatus("Disable");
+            employeeRepository.save(deletingEmployee);
+            return EmployeeConverter.toDTO(deletingEmployee);
         }
         //continue
         employeeRepository.delete(deletingEmployee);

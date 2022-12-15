@@ -1,5 +1,6 @@
 package com.vupt172.exception.exceptionHandling;
 
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,16 +16,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
-    /*@ExceptionHandler(value={ElementNotExistException.class})
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
-    public ErrorMessage elementNotExistException(ElementNotExistException ex, WebRequest request){
-        ErrorMessage errorMessage=new ErrorMessage(HttpStatus.NOT_FOUND.value(),
-                new Date(),
-                ex.getMessage(),
-                request.getDescription(false)
-                );
-        return errorMessage;
-    }*/
+
     @ExceptionHandler(value={MethodArgumentTypeMismatchException.class})
     @ResponseStatus(value=HttpStatus.BAD_REQUEST)
     public ApiError methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request){
@@ -37,11 +29,12 @@ public class ControllerExceptionHandler {
                 );
         return errorMessage;
     }
-/*    @ExceptionHandler(value={DataUniqueException.class})
+/*    @ExceptionHandler(value={JwtValidateException.class})
     @ResponseStatus(value= HttpStatus.BAD_REQUEST)
-    public ErrorMessage dataUniqueException(DataUniqueException ex, WebRequest request){
-        ErrorMessage errorMessage=new ErrorMessage(HttpStatus.BAD_REQUEST.value(),
+    public ApiError dataUniqueException(JwtValidateException ex, WebRequest request){
+        ApiError errorMessage=new ApiError(HttpStatus.BAD_REQUEST.value(),
                 new Date(),
+                "Jwt Validate Exception",
                 ex.getMessage(),
                 request.getDescription(false)
         );
@@ -59,10 +52,23 @@ public ApiError handleValidationExceptions(
     });
     ApiError apiError=new ApiError(HttpStatus.BAD_REQUEST.value(),
             new Date(),
-            "MethodArgumentNotValidException",
+            "Method Argument Not Valid Exception",
             detail,
             request.getDescription(false)
             );
     return apiError;
 }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MysqlDataTruncation.class)
+    public ApiError handleValidationExceptions(
+            MysqlDataTruncation ex,WebRequest request) {
+
+        ApiError apiError=new ApiError(HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                "MySQL Data Exception",
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+        return apiError;
+    }
 }
