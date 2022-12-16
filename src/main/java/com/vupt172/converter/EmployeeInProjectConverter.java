@@ -15,4 +15,17 @@ public class EmployeeInProjectConverter {
         employeeInProjectDTO.setStatus(employeeInProject.getStatus());
         return employeeInProjectDTO;
     }
+    public EmployeeInProject toEntity(EmployeeInProjectDTO employeeInProjectDTO){
+       EmployeeInProject employeeInProject=new EmployeeInProject();
+       employeeInProject.setStatus(employeeInProjectDTO.getStatus());
+       return employeeInProject;
+    }
+    //merge when update;
+    public EmployeeInProject toEntity(EmployeeInProjectDTO employeeInProjectDTO,EmployeeInProject dbEmployeeInProject){
+       EmployeeInProject employeeInProject=new EmployeeInProject();
+       employeeInProject.setEmployee(dbEmployeeInProject.getEmployee());
+       employeeInProject.setProject(dbEmployeeInProject.getProject());
+       employeeInProject.setStatus(employeeInProjectDTO.getStatus());
+       return employeeInProject;
+    }
 }

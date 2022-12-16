@@ -13,13 +13,13 @@ public class AuthenticationUtil {
     }
    public String getAuthUsername(){return userDetails.getUsername();}
     public boolean hasSuperAdminRole(){
-       return this.userDetails.getAuthorities().stream().anyMatch(authority->authority.getAuthority().equals("SUPERADMIN"));
+       return this.userDetails.getAuthorities().stream().anyMatch(authority->authority.getAuthority().equals("ROLE_SUPERADMIN"));
     }
     public boolean hasAdminRole(){
-        return this.userDetails.getAuthorities().stream().anyMatch(authority->authority.getAuthority().equals("ADMIN"));
+        return this.userDetails.getAuthorities().stream().anyMatch(authority->authority.getAuthority().equals("ROLE_ADMIN"));
     }
     public boolean hasUserRole(){
-        return this.userDetails.getAuthorities().stream().anyMatch(authority->authority.getAuthority().equals("USER"));
+        return this.userDetails.getAuthorities().stream().anyMatch(authority->authority.getAuthority().equals("ROLE_USER"));
     }
 
 }
