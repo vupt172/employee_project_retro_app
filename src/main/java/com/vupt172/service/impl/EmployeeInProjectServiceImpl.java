@@ -34,6 +34,7 @@ public class EmployeeInProjectServiceImpl implements IEmployeeInProjectService {
 
     @Override
     public List<EmployeeInProjectDTO> findAll(Long projectId) {
+        System.out.println(projectId);
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ElementNotExistException("Project not exist with id = " + projectId));
         List<EmployeeInProject> employees = employeeInProjectRepository.findByProject_Id(projectId);

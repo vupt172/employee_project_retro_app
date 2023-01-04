@@ -53,10 +53,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
         boolean isExistByUsername = employeeRepository.existsByUsername(employeeDTO.getUsername());
         if (isExistByUsername)
             throw new DataUniqueException("Username is unique");
-        //--check phone
+ /*       //--check phone
         boolean isExistByPhone = employeeRepository.existsByPhone(employeeDTO.getPhone());
         if (isExistByPhone)
-            throw new DataUniqueException("Phone is unique");
+            throw new DataUniqueException("Phone is unique");*/
         //--check email
         boolean isExistByEmail = employeeRepository.existsByEmail(employeeDTO.getEmail());
         if (isExistByEmail)

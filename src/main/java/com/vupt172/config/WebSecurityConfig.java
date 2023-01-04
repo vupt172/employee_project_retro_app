@@ -23,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+//@Profile(value = {"dev","local"})
 public class WebSecurityConfig {
     @Autowired
     UserDetailsService userDetailsService;
@@ -38,6 +39,7 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests().antMatchers("/test/**","/sync").permitAll().and()
                 .authorizeRequests().antMatchers("/api/auth/login","/api/auth/refreshtoken").permitAll()
                 .antMatchers("/api/employees/**").hasAnyRole("SUPERADMIN","ADMIN")
                 .antMatchers(HttpMethod.GET,"/api/projects/**").hasAnyRole("USER","SUPERADMIN","ADMIN")
@@ -52,7 +54,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         System.out.println("webSecurityCustomizer");
-        return (web -> web.ignoring().antMatchers("/js/**","/images/**"));
+        return (web -> web.ignoring().antMatchers("/fake/**"));
     }
     @Bean
     public PasswordEncoder passwordEncoder() {

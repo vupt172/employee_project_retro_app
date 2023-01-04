@@ -1,5 +1,6 @@
 package com.vupt172.security.jwt;
 
+import com.vupt172.exception.JwtValidateException;
 import com.vupt172.security.service.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -26,7 +27,6 @@ public class JwtUtils {
     public String generateJwtToken(Authentication authentication) {
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
@@ -58,27 +58,27 @@ public class JwtUtils {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateJwtToken(String authToken) {
+    public boolean validateJwtToken(String authToken) throws JwtValidateException {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
             logger.error("Invalid JWT signature: {}", e.getMessage());
-           // throw new JwtValidateException("Invalid Jwt Signature");
+            throw new JwtValidateException("Invalid Jwt Signature");
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
-         //   throw new JwtValidateException("Invalid Jwt Token");
+            throw new JwtValidateException("Invalid Jwt Token");
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());
-         //   throw new JwtValidateException("JWT token has been expired");
+            throw new JwtValidateException("JWT token has been expired");
         } catch (UnsupportedJwtException e) {
             logger.error("JWT token is unsupported: {}", e.getMessage());
-          //  throw new JwtValidateException("JWT Token is unsupported");
+            throw new JwtValidateException("JWT Token is unsupported");
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
-           // throw new JwtValidateException("JWT Claims string is empty");
+           throw new JwtValidateException("JWT claims string is empty");
         }
-    return false;
+    //return false;
     }
     public HashMap<String,Object> validateJwtToken1(String authToken) {
         HashMap<String,Object> results=new HashMap<>();

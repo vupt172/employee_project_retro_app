@@ -1,0 +1,35 @@
+package com.vupt172.test;
+
+import lombok.Data;
+import lombok.ToString;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+@Data
+@ToString
+@Component
+@Profile("test")
+@Scope("prototype")
+public class Person {
+  public Integer id;
+  public String name;
+  public String message="hello person";
+  public Person(){}
+  public Person(Integer id,String name,String message){
+    this.id=id;
+    this.name=name;
+    this.message=message;
+  }
+  @PostConstruct
+  public void init(){
+    System.out.println("Person @PostConstruct is called");
+  }
+  @PreDestroy
+  public void destroy(){
+    System.out.println("Person @PreDestroy is called");
+  }
+}
