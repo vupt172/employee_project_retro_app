@@ -10,7 +10,7 @@ import com.vupt172.manage_employee_app.TestData.EmployeeTestData;
 import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.EmployeeRepository;
 import com.vupt172.security.service.UserDetailsImpl;
-import com.vupt172.service.impl.EmployeeServiceImpl;
+import com.vupt172.service.EmployeeServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -126,7 +126,7 @@ public class EmployeeServiceTest {
     @Test
     void whenCreate_WithExistEmail_ThrowDataUniqueException() {
         Mockito.when(employeeRepository.existsByUsername(Mockito.anyString())).thenReturn(false);
-        Mockito.when(employeeRepository.existsByPhone(Mockito.anyString())).thenReturn(false);
+//        Mockito.when(employeeRepository.existsByPhone(Mockito.anyString())).thenReturn(false);
         Mockito.when(employeeRepository.existsByEmail(Mockito.anyString())).thenReturn(true);
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setUsername("usernameabc");
@@ -146,7 +146,7 @@ public class EmployeeServiceTest {
     @Test
     void whenCreate_WithSuperAdminRole_ThrowOverPermissionException() {
         Mockito.when(employeeRepository.existsByUsername(Mockito.anyString())).thenReturn(false);
-        Mockito.when(employeeRepository.existsByPhone(Mockito.anyString())).thenReturn(false);
+//        Mockito.when(employeeRepository.existsByPhone(Mockito.anyString())).thenReturn(false);
         Mockito.when(employeeRepository.existsByEmail(Mockito.anyString())).thenReturn(false);
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setUsername("usernameabc");
@@ -230,7 +230,7 @@ public class EmployeeServiceTest {
         employeeDTO.setStatus("Enable");
         employeeDTO.setRole(2);
         //authentication
-        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "vupt101@gmaiil.com", "12345678", List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "vupt101@gmaiil.com", "12345678","Enable", List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //when
@@ -263,7 +263,7 @@ public class EmployeeServiceTest {
         employeeDTO.setStatus("Enable");
         employeeDTO.setRole(2);
         //authentication
-        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "vupt101@gmaiil.com", "12345678", List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "vupt101@gmaiil.com", "12345678", "Enable",List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //when
@@ -296,7 +296,7 @@ public class EmployeeServiceTest {
         employeeDTO.setStatus("Enable");
         employeeDTO.setRole(0);
         //authentication
-        UserDetailsImpl userDetails = new UserDetailsImpl(3L, "root", "root101@gmaiil.com", "12345678", List.of(new SimpleGrantedAuthority("ROLE_SUPERADMIN")));
+        UserDetailsImpl userDetails = new UserDetailsImpl(3L, "root", "root101@gmaiil.com", "12345678", "Enable",List.of(new SimpleGrantedAuthority("ROLE_SUPERADMIN")));
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //when
@@ -352,7 +352,7 @@ public class EmployeeServiceTest {
         employeeByPhone.setRole(0);
         employeeByPhone.setBirthDay(Date.valueOf(LocalDate.of(2022, 02, 18)));
         //authentication
-        UserDetailsImpl userDetails = new UserDetailsImpl(3L, "root", "root101@gmaiil.com", "12345678", List.of(new SimpleGrantedAuthority("ROLE_SUPERADMIN")));
+        UserDetailsImpl userDetails = new UserDetailsImpl(3L, "root", "root101@gmaiil.com", "12345678", "Enable",List.of(new SimpleGrantedAuthority("ROLE_SUPERADMIN")));
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //when
@@ -385,7 +385,7 @@ public class EmployeeServiceTest {
         employeeDTO.setStatus("Enable");
         employeeDTO.setRole(0);
         //authentication
-        UserDetailsImpl userDetails = new UserDetailsImpl(3L, "root", "root101@gmaiil.com", "12345678", List.of(new SimpleGrantedAuthority("ROLE_SUPERADMIN")));
+        UserDetailsImpl userDetails = new UserDetailsImpl(3L, "root", "root101@gmaiil.com", "12345678", "Enable",List.of(new SimpleGrantedAuthority("ROLE_SUPERADMIN")));
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //when
@@ -421,7 +421,7 @@ public class EmployeeServiceTest {
         //when
         Mockito.when(employeeRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(dbEmployee));
         //authentication
-        UserDetailsImpl userDetails = new UserDetailsImpl(3L, "root", "root101@gmaiil.com", "12345678", List.of(new SimpleGrantedAuthority("ROLE_SUPERADMIN")));
+        UserDetailsImpl userDetails = new UserDetailsImpl(3L, "root", "root101@gmaiil.com", "12345678", "Enable",List.of(new SimpleGrantedAuthority("ROLE_SUPERADMIN")));
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //test
@@ -443,7 +443,7 @@ public class EmployeeServiceTest {
         dbEmployee.setRole(0);
         dbEmployee.setBirthDay(Date.valueOf(LocalDate.of(2022, 02, 18)));
         //authentication
-        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "admin101@gmaiil.com", "12345678", List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "admin101@gmaiil.com", "12345678", "Enable",List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //when
@@ -466,7 +466,7 @@ public class EmployeeServiceTest {
         dbEmployee.setRole(1);
         dbEmployee.setBirthDay(Date.valueOf(LocalDate.of(2022, 02, 18)));
         //authentication
-        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "admin101@gmaiil.com", "12345678", List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "admin101@gmaiil.com", "12345678", "Enable",List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //when
@@ -499,7 +499,7 @@ public class EmployeeServiceTest {
         deletingEmployee.setStatus("Disable");
         deletingEmployee.setRole(2);
         //authentication
-        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "admin101@gmaiil.com", "12345678", List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "admin101@gmaiil.com", "12345678", "Enable",List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //when
@@ -523,7 +523,7 @@ public class EmployeeServiceTest {
         dbEmployee.setStatus("Enable");
         dbEmployee.setRole(2);
         //authentication
-        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "admin101@gmaiil.com", "12345678", List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        UserDetailsImpl userDetails = new UserDetailsImpl(1L, "admin1", "admin101@gmaiil.com", "12345678", "Enable",List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //when

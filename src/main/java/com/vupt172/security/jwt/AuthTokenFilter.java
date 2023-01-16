@@ -1,10 +1,9 @@
 package com.vupt172.security.jwt;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vupt172.exception.JwtValidateException;
 import com.vupt172.exception.exceptionHandling.ApiError;
 import com.vupt172.security.service.UserDetailsServiceImpl;
+import com.vupt172.utils.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +41,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
            SecurityContextHolder.getContext().setAuthentication(authentication);
+
        }
        filterChain.doFilter(request,response);
    }
@@ -56,7 +56,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
        );
        response.setStatus(HttpStatus.UNAUTHORIZED.value());
        response.setContentType("text/json");
-       response.getWriter().write(convertObjectToJson(apiError));
+       response.getWriter().write(JsonUtil.convertObjectToJson(apiError));
    }
     }
     private String parseJwt(HttpServletRequest request){
@@ -67,11 +67,5 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         }
         return null;
     }
-    public String convertObjectToJson(Object object) throws JsonProcessingException {
-        if (object == null) {
-            return null;
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
-    }
+
 }

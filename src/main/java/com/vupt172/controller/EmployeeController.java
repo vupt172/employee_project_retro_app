@@ -2,7 +2,7 @@ package com.vupt172.controller;
 
 import com.vupt172.dto.EmployeeDTO;
 import com.vupt172.security.jwt.JwtUtils;
-import com.vupt172.service.IEmployeeService;
+import com.vupt172.service.itf.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +23,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.findAll());
     }
     @GetMapping("/{id}")
+    //@ResponseBody
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id){
         EmployeeDTO employeeDTO=employeeService.findById(id).orElse(null);
         if(employeeDTO==null){

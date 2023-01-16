@@ -3,17 +3,13 @@ package com.vupt172.test;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 @Data
 @ToString
-@Component
 @Profile("test")
-@Scope("prototype")
 public class Person {
   public Integer id;
   public String name;

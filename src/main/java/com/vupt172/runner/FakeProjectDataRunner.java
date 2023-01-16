@@ -11,7 +11,7 @@ import java.util.*;
 
 @Component
 @Profile("test")
-public class FakeProjectDataRunner implements CommandLineRunner {
+public class FakeProjectDataRunner  implements CommandLineRunner {
     @Autowired
     private ProjectRepository projectRepository;
 
@@ -29,6 +29,7 @@ public class FakeProjectDataRunner implements CommandLineRunner {
         projectList.add(new Project("Project A9", "", "Enable"));
         projectList.add(new Project("Project A10", "", "Enable"));
         projectRepository.saveAll(projectList);
+
     }
 
 }

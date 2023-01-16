@@ -3,7 +3,7 @@ package com.vupt172.controller;
 import com.vupt172.dto.EmployeeInProjectDTO;
 import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.EmployeeRepository;
-import com.vupt172.service.IEmployeeInProjectService;
+import com.vupt172.service.itf.IEmployeeInProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

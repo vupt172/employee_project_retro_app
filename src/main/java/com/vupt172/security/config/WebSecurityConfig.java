@@ -1,4 +1,4 @@
-package com.vupt172.config;
+package com.vupt172.security.config;
 
 import com.vupt172.security.jwt.AuthEntryPointJwt;
 import com.vupt172.security.jwt.AuthTokenFilter;
@@ -39,9 +39,9 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/test/**","/sync").permitAll().and()
+                .authorizeRequests().antMatchers("/test/**","/google-login","/oauth2/**").permitAll().and()
                 .authorizeRequests().antMatchers("/api/auth/login","/api/auth/refreshtoken").permitAll()
-                .antMatchers("/api/employees/**").hasAnyRole("SUPERADMIN","ADMIN")
+                .antMatchers("/api/employees/**","/sync").hasAnyRole("SUPERADMIN","ADMIN")
                 .antMatchers(HttpMethod.GET,"/api/projects/**").hasAnyRole("USER","SUPERADMIN","ADMIN")
                 .antMatchers("/api/projects/**").hasAnyRole("SUPERADMIN","ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/api/evaluations/**").hasAnyRole("SUPERADMIN","ADMIN")
@@ -54,7 +54,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         System.out.println("webSecurityCustomizer");
-        return (web -> web.ignoring().antMatchers("/fake/**"));
+        return (web -> web.ignoring().antMatchers("/fake/**","/v3/api-docs/**","/swagger-ui/**"));
     }
     @Bean
     public PasswordEncoder passwordEncoder() {

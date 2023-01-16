@@ -2,7 +2,7 @@ package com.vupt172.manage_employee_app.controller;
 
 import com.vupt172.controller.ProjectController;
 import com.vupt172.dto.ProjectDTO;
-import com.vupt172.service.IProjectService;
+import com.vupt172.service.itf.IProjectService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.vupt172.service.impl;
+package com.vupt172.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vupt172.dto.SyncDataResult;

@@ -10,7 +10,7 @@ import com.vupt172.manage_employee_app.TestData.EmployeeTestData;
 import com.vupt172.manage_employee_app.TestData.ProjectRoleTestData;
 import com.vupt172.manage_employee_app.TestData.ProjectTestData;
 import com.vupt172.repository.*;
-import com.vupt172.service.impl.EmployeeInProjectServiceImpl;
+import com.vupt172.service.EmployeeInProjectServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

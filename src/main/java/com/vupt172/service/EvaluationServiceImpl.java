@@ -1,4 +1,4 @@
-package com.vupt172.service.impl;
+package com.vupt172.service;
 
 import com.vupt172.converter.EvaluationConverter;
 import com.vupt172.dto.EvaluationDTO;
@@ -11,7 +11,7 @@ import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.EmployeeRepository;
 import com.vupt172.repository.EvaluationRepository;
 import com.vupt172.repository.ProjectRepository;
-import com.vupt172.service.IEvaluationService;
+import com.vupt172.service.itf.IEvaluationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

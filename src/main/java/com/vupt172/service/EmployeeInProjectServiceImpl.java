@@ -1,4 +1,4 @@
-package com.vupt172.service.impl;
+package com.vupt172.service;
 
 import com.vupt172.converter.EmployeeInProjectConverter;
 import com.vupt172.dto.EmployeeInProjectDTO;
@@ -9,7 +9,7 @@ import com.vupt172.entity.ProjectRole;
 import com.vupt172.exception.ElementNotExistException;
 import com.vupt172.exception.EmployeeAlreadyExistInProjectException;
 import com.vupt172.repository.*;
-import com.vupt172.service.IEmployeeInProjectService;
+import com.vupt172.service.itf.IEmployeeInProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

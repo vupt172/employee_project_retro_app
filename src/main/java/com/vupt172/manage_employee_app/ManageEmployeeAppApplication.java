@@ -10,19 +10,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @SpringBootApplication()
 @EntityScan(basePackages = "com.vupt172")
 @ComponentScan(basePackages = {"com.vupt172","com.vupt172.test"})
 @EnableJpaRepositories(basePackages = "com.vupt172.repository")
+@EnableScheduling
+@EnableAsync
 public class ManageEmployeeAppApplication {
 	public static void main(String[] args) {
 		ApplicationContext context=SpringApplication.run(ManageEmployeeAppApplication.class, args);
-     //   testPrototypesBeanUsingComponentAnnotation(context);
-	//	testSingletonBeanBeanUsingBeanAnnotation(context);
+       //testPrototypeBean(context);
+		//testSingletonBean(context);
 	}
-	static void testPrototypeBeanUsingComponentAnnotation(ApplicationContext context){
+	static void testPrototypeBean(ApplicationContext context){
 		Person personA=context.getBean(Person.class);
 		System.out.println("--PersonA--");
 		System.out.println("Before :"+personA.toString());
@@ -38,7 +42,7 @@ public class ManageEmployeeAppApplication {
 		personB.setMessage("This is Person B");
 		System.out.println("After:"+personB.toString());
 	}
-	static void testSingletonBeanBeanUsingBeanAnnotation(ApplicationContext context){
+	static void testSingletonBean(ApplicationContext context){
       Computer computer1=context.getBean(Computer.class);
 		System.out.println("--Computer1--");
 		System.out.println("Before :"+computer1.toString());

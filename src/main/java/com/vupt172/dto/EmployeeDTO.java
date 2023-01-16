@@ -23,8 +23,8 @@ public class EmployeeDTO {
     @NotBlank
     @Size(max=255,message = "email must be lesser than 256 characters")
     private String email;
-    @NotBlank
-    @Size(max=11,message = "phone must be lesser than 256 characters")
+  /*  @NotBlank
+    @Size(max=11,message = "phone must be lesser than 256 characters")*/
     private String phone;
     @Min(value=0,message = "role should not be lesser than 0")
     @Max(value = 2,message = "role should not be greater than 2")

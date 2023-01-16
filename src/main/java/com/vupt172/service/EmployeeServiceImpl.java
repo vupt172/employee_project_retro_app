@@ -1,4 +1,4 @@
-package com.vupt172.service.impl;
+package com.vupt172.service;
 
 import com.vupt172.converter.EmployeeConverter;
 import com.vupt172.dto.EmployeeDTO;
@@ -8,7 +8,7 @@ import com.vupt172.exception.ElementNotExistException;
 import com.vupt172.exception.OverPermissionException;
 import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.EmployeeRepository;
-import com.vupt172.service.IEmployeeService;
+import com.vupt172.service.itf.IEmployeeService;
 import com.vupt172.utils.AuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

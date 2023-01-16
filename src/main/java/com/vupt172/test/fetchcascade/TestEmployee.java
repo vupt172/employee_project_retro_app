@@ -18,7 +18,7 @@ public class TestEmployee {
     @Column
     private String name;
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     TestCompany company;
 }

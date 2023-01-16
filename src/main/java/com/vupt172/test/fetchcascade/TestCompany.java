@@ -17,6 +17,6 @@ public class TestCompany {
     private int id;
     @Column
     private String name;
-    @OneToMany(mappedBy = "company",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "company",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     List<TestEmployee> employeeList=new ArrayList<>();
 }

@@ -2,6 +2,7 @@ package com.vupt172.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vupt172.entity.Employee;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,23 +11,24 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-
+@Data
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
     private Long id;
     private String username;
     private String email;
+    private String status;
     @JsonIgnore
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(Long id, String username, String email, String password,String status, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
-
+        this.status=status;
     }
 
     public static UserDetailsImpl build(Employee employee) {
@@ -37,7 +39,7 @@ public class UserDetailsImpl implements UserDetails {
         if(employee.getRole()==0)authorities.add(new SimpleGrantedAuthority("ROLE_SUPERADMIN"));
         else if(employee.getRole()==1)authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         else if(employee.getRole()==2)authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return new UserDetailsImpl(employee.getId(), employee.getUsername(), employee.getEmail(), employee.getPassword(), authorities);
+        return new UserDetailsImpl(employee.getId(), employee.getUsername(), employee.getEmail(), employee.getPassword(),employee.getStatus(), authorities);
     }
 
     @Override
@@ -45,15 +47,7 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -72,7 +66,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return status.equals("Enable");
     }
 
     @Override
@@ -85,31 +79,5 @@ public class UserDetailsImpl implements UserDetails {
         return Objects.equals(id, user.id);
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = authorities;
-    }
 }

@@ -1,7 +1,7 @@
 package com.vupt172.controller;
 
 import com.vupt172.dto.EvaluationDTO;
-import com.vupt172.service.IEvaluationService;
+import com.vupt172.service.itf.IEvaluationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
