@@ -1,9 +1,6 @@
-package com.vupt172.service;
+package com.vupt172.service.itf;
 
 import com.vupt172.dto.EmployeeDTO;
-import com.vupt172.entity.Employee;
-import com.vupt172.exception.DataUniqueException;
-import com.vupt172.exception.ElementNotExistException;
 
 import java.util.List;
 import java.util.Optional;

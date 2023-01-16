@@ -1,4 +1,4 @@
-package com.vupt172.controller;
+package com.vupt172.security.controller;
 
 import com.vupt172.exception.exceptionHandling.ApiError;
 import com.vupt172.repository.EmployeeRepository;
@@ -25,7 +25,7 @@ import org.springframework.web.context.request.WebRequest;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -47,9 +47,10 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt=jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl userDetails=(UserDetailsImpl) authentication.getPrincipal();
-        Set<String> roles=userDetails.getAuthorities().stream()
+        List<String> roles=userDetails.getAuthorities().stream()
                 .map(item->item.getAuthority())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
+
         //create RefreshToken
         String refreshToken=jwtUtils.generateRefreshToken(authentication);
         return ResponseEntity.ok(new LoginResponse(

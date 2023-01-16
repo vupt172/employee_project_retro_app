@@ -23,7 +23,7 @@ public class EmployeeConverter {
         return employee;
     }
 
-    public static EmployeeDTO toDTO(Employee employee) {
+    public  EmployeeDTO toDTO(Employee employee) {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(employee.getId());
         employeeDTO.setFullName(employee.getFullName());

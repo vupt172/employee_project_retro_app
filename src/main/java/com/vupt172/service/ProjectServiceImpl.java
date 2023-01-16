@@ -1,4 +1,4 @@
-package com.vupt172.service.impl;
+package com.vupt172.service;
 
 import com.vupt172.converter.ProjectConverter;
 import com.vupt172.dto.ProjectDTO;
@@ -7,7 +7,7 @@ import com.vupt172.exception.DataUniqueException;
 import com.vupt172.exception.ElementNotExistException;
 import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.ProjectRepository;
-import com.vupt172.service.IProjectService;
+import com.vupt172.service.itf.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

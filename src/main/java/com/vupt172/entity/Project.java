@@ -16,6 +16,11 @@ public class Project extends  BaseEntity{
         this.description=description;
         this.status=status;
     }
+    public Project(String name,String description,String status){
+        this.name=name;
+        this.description=description;
+        this.status=status;
+    }
     @Column
     private String name;
     @Column

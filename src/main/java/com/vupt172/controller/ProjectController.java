@@ -2,7 +2,7 @@ package com.vupt172.controller;
 
 import com.vupt172.dto.ProjectDTO;
 import com.vupt172.exception.ElementNotExistException;
-import com.vupt172.service.IProjectService;
+import com.vupt172.service.itf.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

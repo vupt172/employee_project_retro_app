@@ -1,4 +1,4 @@
-package com.vupt172.service;
+package com.vupt172.manage_employee_app.service;
 
 import com.vupt172.converter.ProjectConverter;
 import com.vupt172.dto.ProjectDTO;
@@ -7,7 +7,7 @@ import com.vupt172.exception.DataUniqueException;
 import com.vupt172.exception.ElementNotExistException;
 import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.ProjectRepository;
-import com.vupt172.service.impl.ProjectServiceImpl;
+import com.vupt172.service.ProjectServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

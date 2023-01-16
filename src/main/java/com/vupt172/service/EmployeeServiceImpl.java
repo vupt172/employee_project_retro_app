@@ -1,4 +1,4 @@
-package com.vupt172.service.impl;
+package com.vupt172.service;
 
 import com.vupt172.converter.EmployeeConverter;
 import com.vupt172.dto.EmployeeDTO;
@@ -8,7 +8,7 @@ import com.vupt172.exception.ElementNotExistException;
 import com.vupt172.exception.OverPermissionException;
 import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.EmployeeRepository;
-import com.vupt172.service.IEmployeeService;
+import com.vupt172.service.itf.IEmployeeService;
 import com.vupt172.utils.AuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +30,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     public List<EmployeeDTO> findAll() {
         List<EmployeeDTO> employeeDTOS = employeeRepository.findAll().stream()
-                .map(e -> EmployeeConverter.toDTO(e)).collect(Collectors.toList());
+                .map(e -> employeeConverter.toDTO(e)).collect(Collectors.toList());
         return employeeDTOS;
     }
 
@@ -39,7 +39,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         Employee employee = employeeRepository.findById(id).orElse(null);
         EmployeeDTO employeeDTO = null;
         if (employee != null) {
-            employeeDTO = EmployeeConverter.toDTO(employee);
+            employeeDTO = employeeConverter.toDTO(employee);
         }
         return Optional.ofNullable(employeeDTO);
     }
@@ -53,26 +53,31 @@ public class EmployeeServiceImpl implements IEmployeeService {
         boolean isExistByUsername = employeeRepository.existsByUsername(employeeDTO.getUsername());
         if (isExistByUsername)
             throw new DataUniqueException("Username is unique");
-        //--check phone
+ /*       //--check phone
         boolean isExistByPhone = employeeRepository.existsByPhone(employeeDTO.getPhone());
         if (isExistByPhone)
-            throw new DataUniqueException("Phone is unique");
+            throw new DataUniqueException("Phone is unique");*/
         //--check email
         boolean isExistByEmail = employeeRepository.existsByEmail(employeeDTO.getEmail());
         if (isExistByEmail)
             throw new DataUniqueException("Email is unique");
+        //check role
+        if(employeeDTO.getRole()==0){
+            throw new OverPermissionException("Cannot create employee with SUPERADMIN role");
+        }
         //continue
         Employee employee = employeeConverter.toEntity(employeeDTO);
         employee = employeeRepository.save(employee);
-        return EmployeeConverter.toDTO(employee);
+        return employeeConverter.toDTO(employee);
     }
 
     @Override
-    public EmployeeDTO update(EmployeeDTO employeeDTO) throws ElementNotExistException {
+    public EmployeeDTO update(EmployeeDTO employeeDTO)  {
         //check business logic
         //-find Employee
         Employee dbEmployee = employeeRepository.findById(employeeDTO.getId())
-                .orElseThrow(() -> new ElementNotExistException("Employee is not exist with id=" + employeeDTO.getId()));
+                .orElseThrow(() -> new ElementNotExistException("Employee is not exist with id = " + employeeDTO.getId()));
+
         Employee updatingEmployee = employeeConverter.toEntity(employeeDTO, dbEmployee);
         //check Role
         AuthenticationUtil authenticationUtil = new AuthenticationUtil(SecurityContextHolder.getContext().getAuthentication());
@@ -87,7 +92,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         else if (authenticationUtil.hasAdminRole()) {
             //--check updating enity =superAdmin+admn
             if (dbEmployee.getRole() == 0)
-                throw new OverPermissionException("ADMIN cannot update ADSUPER ADMIN");
+                throw new OverPermissionException("ADMIN cannot update SUPER ADMIN");
             else if (dbEmployee.getRole() == 1)
                 throw new OverPermissionException("ADMIN cannot update ADMIN");
         }
@@ -120,7 +125,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
         //continue
         updatingEmployee = employeeRepository.save(updatingEmployee);
-        return EmployeeConverter.toDTO(updatingEmployee);
+        return employeeConverter.toDTO(updatingEmployee);
     }
 
     @Override
@@ -148,12 +153,12 @@ public class EmployeeServiceImpl implements IEmployeeService {
         if(hasEmployeeInProject){
             deletingEmployee.setStatus("Disable");
             employeeRepository.save(deletingEmployee);
-            return EmployeeConverter.toDTO(deletingEmployee);
+            return employeeConverter.toDTO(deletingEmployee);
         }
         //continue
         employeeRepository.delete(deletingEmployee);
         deletingEmployee.setStatus("Deleted");
-        return EmployeeConverter.toDTO(deletingEmployee);
+        return employeeConverter.toDTO(deletingEmployee);
     }
 
     boolean permissionUpdateToSuperAdminRole(AuthenticationUtil authenticationUtil, Employee dbEmployee, Employee updatingEmployee) {

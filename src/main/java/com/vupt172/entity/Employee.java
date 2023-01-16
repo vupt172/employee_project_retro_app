@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 public class Employee extends BaseEntity {
     @Column(name = "fullname")
-    private String fullName;
+    private String fullName; //full_name
     @Column
     private String username;
     @Column
@@ -27,6 +27,9 @@ public class Employee extends BaseEntity {
     private int role;
     private String status;
     @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER,mappedBy ="employee")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy ="employee")
     private List<EmployeeInProject> employeeInProjects=new ArrayList<>();
+    public void showEmailInfo(){
+        System.out.println( "[Employee email:"+this.email+"]");
+    }
 }

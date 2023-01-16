@@ -7,6 +7,7 @@ import java.util.Date;
 
 
 public class EvaluationConverter {
+    public String message="this is evaluation converter";
     public EvaluationDTO toDTO(Evaluation evaluation) {
         EvaluationDTO evaluationDTO = new EvaluationDTO();
         evaluationDTO.setId(evaluation.getId());

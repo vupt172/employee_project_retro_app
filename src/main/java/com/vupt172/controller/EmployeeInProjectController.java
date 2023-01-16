@@ -3,12 +3,13 @@ package com.vupt172.controller;
 import com.vupt172.dto.EmployeeInProjectDTO;
 import com.vupt172.repository.EmployeeInProjectRepository;
 import com.vupt172.repository.EmployeeRepository;
-import com.vupt172.service.IEmployeeInProjectService;
+import com.vupt172.service.itf.IEmployeeInProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,13 +33,13 @@ public class EmployeeInProjectController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return ResponseEntity.ok(employeeInProjectDTO);
     }
-    @PostMapping ResponseEntity<EmployeeInProjectDTO> addEmployeeToProject(@PathVariable Long projectId,@RequestBody  EmployeeInProjectDTO employeeInProjectDTO){
+    @PostMapping ResponseEntity<EmployeeInProjectDTO> addEmployeeToProject(@PathVariable Long projectId,@Valid @RequestBody  EmployeeInProjectDTO employeeInProjectDTO){
        employeeInProjectDTO.setProjectId(projectId);
         EmployeeInProjectDTO returnDTO=employeeInProjectService.createEmployeeInProject(employeeInProjectDTO);
         return ResponseEntity.ok(returnDTO);
     }
     @PutMapping("/{employeeId}")
-    public ResponseEntity<EmployeeInProjectDTO> updateEmployeeInProject(@PathVariable Long projectId,@PathVariable Long employeeId,@RequestBody EmployeeInProjectDTO employeeInProjectDTO){
+    public ResponseEntity<EmployeeInProjectDTO> updateEmployeeInProject(@PathVariable Long projectId, @PathVariable Long employeeId,@Valid @RequestBody EmployeeInProjectDTO employeeInProjectDTO){
         employeeInProjectDTO.setProjectId(projectId);
         employeeInProjectDTO.setEmployeeId(employeeId);
         EmployeeInProjectDTO returnDTO=employeeInProjectService.updateEmployeeInProject(employeeInProjectDTO);

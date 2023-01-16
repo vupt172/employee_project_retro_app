@@ -7,14 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MyConfig {
- /*   @Bean
-    public PasswordEncoder passwordEncoder() {
-        System.out.println("passwordEncoder");
-        return new BCryptPasswordEncoder();
-    }*/
+
     @Bean
     public EmployeeConverter employeeConverter(){
-
         System.out.println("bean employee converter");
         return new EmployeeConverter();
     }
@@ -22,4 +17,5 @@ public class MyConfig {
     public EvaluationConverter evaluationConverter(){
         return new EvaluationConverter();
     }
+
 }
