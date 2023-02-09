@@ -30,6 +30,7 @@ public class SyncDataService {
        SyncData syncData=objects.block();
        return  syncData.getEmployeeList();
     }
+
     @Transactional
     public SyncDataResult SyncData(){
      List<JsonEmployee> jsonEmployeeList=getEmployeeListJson();

@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile({"dev","prod","test","local"})
+@Profile({"dev","prod"})
 
 public class ScheduleTask {
     @Autowired
@@ -24,10 +24,5 @@ public class ScheduleTask {
         System.out.println("New Employee");
         syncDataResult.getNewEmployeeList().forEach(Employee::showEmailInfo);
         System.out.println("END");
-    }
-    @Scheduled
-    @Scheduled(cron = "0s 0/10 * * * *")
-    public  void test(){
-        System.out.println("abc");
     }
 }
